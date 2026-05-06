@@ -3,25 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect } from 'react';
-import { 
-  ChevronRight, 
-  Plus, 
-  Settings, 
-  Search, 
-  Copy, 
-  Check, 
-  Layout, 
+import {
+  Plus,
+  Settings,
+  Copy,
   MessageSquare,
   AlertCircle,
-  Phone,
   User,
-  MapPin,
   Save,
   Trash2,
   X,
@@ -87,7 +76,7 @@ const DEFAULT_SPEECHES: Speech[] = [
       },
       {
         id: '5',
-        title: '6 · Cierre final',
+        title: '5 · Cierre final',
         subtitle: 'Confirmación y despedida',
         content: '"Perfecto, [nombre del titular]. Queda confirmada su visita el [dia] en horas de la [horario] en [direccion].\n\nNuestro consultor le va a llamar el día anterior para confirmarle la hora exacta. Si necesita comunicarse con nosotros antes, con gusto le atendemos.\n\nFue un placer hablar con usted — y quédese tranquilo/a, con Windmar usted está en buenas manos."',
       }
@@ -106,12 +95,17 @@ export default function App() {
   const [speeches, setSpeeches] = useState<Speech[]>([]);
   const [speechToEdit, setSpeechToEdit] = useState<Speech | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  
+
   useEffect(() => {
-    const saved = localStorage.getItem('windmar_speeches');
-    if (saved) {
-      setSpeeches(JSON.parse(saved));
-    } else {
+    try {
+      const saved = localStorage.getItem('windmar_speeches');
+      if (saved) {
+        setSpeeches(JSON.parse(saved));
+      } else {
+        setSpeeches(DEFAULT_SPEECHES);
+        localStorage.setItem('windmar_speeches', JSON.stringify(DEFAULT_SPEECHES));
+      }
+    } catch {
       setSpeeches(DEFAULT_SPEECHES);
       localStorage.setItem('windmar_speeches', JSON.stringify(DEFAULT_SPEECHES));
     }
@@ -144,31 +138,30 @@ export default function App() {
       {/* Navigation */}
       <nav className="bg-white border-b border-wh-lightblue/30 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="bg-wh-blue p-2 rounded-lg text-white shadow-sm">
-            <Layout size={24} />
-          </div>
-          <div>
-            <h1 className="font-bold text-lg leading-tight text-wh-darkblue">Windmar Solar</h1>
-            <p className="text-[10px] text-wh-grey font-bold tracking-wide uppercase tracking-[0.15em]">Florida Call Center</p>
-          </div>
+          <img
+            src="https://i.postimg.cc/3NvQhzx3/Windmar-logo-FL.png"
+            alt="Windmar Solar Florida"
+            className="h-10 w-auto object-contain"
+          />
+          <p className="text-[10px] text-wh-grey font-bold tracking-wide uppercase tracking-[0.15em]">Florida Call Center</p>
         </div>
-        
+
         <div className="flex bg-slate-100 p-1 rounded-full border border-slate-200">
-          <button 
+          <button
             onClick={() => setActiveMode('agent')}
             className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
-              activeMode === 'agent' 
-                ? 'bg-white text-wh-blue shadow-md border-transparent' 
+              activeMode === 'agent'
+                ? 'bg-white text-wh-blue shadow-md border-transparent'
                 : 'text-wh-grey hover:text-wh-black border-transparent'
             }`}
           >
             Modo Asesor
           </button>
-          <button 
+          <button
             onClick={() => setActiveMode('manager')}
             className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
-              activeMode === 'manager' 
-                ? 'bg-white text-wh-blue shadow-md border-transparent' 
+              activeMode === 'manager'
+                ? 'bg-white text-wh-blue shadow-md border-transparent'
                 : 'text-wh-grey hover:text-wh-black border-transparent'
             }`}
           >
@@ -186,9 +179,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <AgentView 
-                speeches={speeches} 
-                onEditRequested={handleQuickEdit} 
+              <AgentView
+                speeches={speeches}
+                onEditRequested={handleQuickEdit}
               />
             </motion.div>
           ) : (
@@ -198,9 +191,9 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
             >
-              <ManagerView 
-                speeches={speeches} 
-                onUpdate={updateSpeeches} 
+              <ManagerView
+                speeches={speeches}
+                onUpdate={updateSpeeches}
                 initialEditSpeech={speechToEdit}
                 onEditHandled={() => setSpeechToEdit(null)}
               />
@@ -224,7 +217,6 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
   });
   const [showObjections, setShowObjections] = useState(false);
 
-  // Sync selectedSpeechId if it was initialized empty and speeches become available
   useEffect(() => {
     if (!selectedSpeechId && speeches.length > 0) {
       setSelectedSpeechId(speeches[0].id);
@@ -254,7 +246,7 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
             <label className="block text-sm font-bold text-wh-black mb-2 flex items-center gap-2 uppercase tracking-wider">
               <FileText size={16} className="text-wh-blue" /> Seleccionar Estrategia
             </label>
-            <select 
+            <select
               value={selectedSpeechId}
               onChange={(e) => setSelectedSpeechId(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-wh-blue transition-all outline-none text-wh-black font-semibold"
@@ -272,8 +264,8 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
             <div className="grid gap-3">
               <div>
                 <label className="text-[10px] font-bold text-wh-grey uppercase ml-1">Nombre del Titular</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Ej: Juan Perez"
                   value={variables['nombre del titular']}
                   onChange={e => setVariables({...variables, 'nombre del titular': e.target.value})}
@@ -283,8 +275,8 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-[10px] font-bold text-wh-grey uppercase ml-1">Tu Nombre</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     placeholder="Tu nombre"
                     value={variables['nombre del asesor']}
                     onChange={e => setVariables({...variables, 'nombre del asesor': e.target.value})}
@@ -293,8 +285,8 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
                 </div>
                 <div>
                   <label className="text-[10px] font-bold text-wh-grey uppercase ml-1">Ciudad</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     placeholder="Ej: Orlando"
                     value={variables['ciudad']}
                     onChange={e => setVariables({...variables, 'ciudad': e.target.value})}
@@ -305,7 +297,7 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
             </div>
           </div>
 
-          <button 
+          <button
             onClick={() => setShowObjections(!showObjections)}
             className={`w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-xl ${
               showObjections ? 'bg-wh-orange/10 text-wh-orange border border-wh-orange/30' : 'bg-wh-blue text-white'
@@ -319,7 +311,7 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
         {/* Floating Objections Panel */}
         <AnimatePresence>
           {showObjections && (
-            <motion.div 
+            <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -328,10 +320,10 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-bold text-wh-orange uppercase tracking-wide">Objeciones Comunes</h4>
                 <div className="flex items-center gap-2">
-                  <button 
+                  <button
                     onClick={() => {
                       const text = selectedSpeech.objections.map(obj => `CLIENTE: ${obj.trigger}\nRESPUESTA: ${obj.response}`).join('\n\n');
-                      navigator.clipboard.writeText(text);
+                      navigator.clipboard.writeText(text).catch(() => {});
                     }}
                     className="flex items-center gap-1.5 px-2 py-1 bg-wh-orange/10 text-wh-orange text-[10px] font-bold rounded-md hover:bg-wh-orange/20 transition-all border border-wh-orange/20"
                     title="Copiar todas las objeciones"
@@ -350,8 +342,8 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
                     <p className="text-[10px] font-bold text-wh-black opacity-50 uppercase mb-1">Si dice: "{obj.trigger}"</p>
                     <div className="p-3 bg-white border border-wh-orange/10 rounded-lg text-sm text-wh-black italic relative">
                       {obj.response}
-                      <button 
-                        onClick={() => navigator.clipboard.writeText(obj.response)}
+                      <button
+                        onClick={() => navigator.clipboard.writeText(obj.response).catch(() => {})}
                         className="absolute top-2 right-2 p-1 text-slate-300 hover:text-wh-blue opacity-0 group-hover:opacity-100 transition-all"
                       >
                         <Copy size={12} />
@@ -368,7 +360,7 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
       {/* Right Column: Script Content */}
       <div className="lg:col-span-8 space-y-6">
         {selectedSpeech.steps.map((step, idx) => (
-          <motion.div 
+          <motion.div
             key={step.id}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -388,7 +380,7 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
                 </div>
                 <div className="flex items-center gap-2">
                   {onEditRequested && (
-                    <button 
+                    <button
                       onClick={() => onEditRequested(selectedSpeech)}
                       className="p-2 text-wh-grey hover:text-wh-blue hover:bg-wh-blue/5 rounded-lg transition-all flex items-center gap-2 text-xs font-semibold"
                       title="Editar esta estrategia"
@@ -396,8 +388,8 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
                       <Pencil size={14} /> Editar
                     </button>
                   )}
-                  <button 
-                    onClick={() => navigator.clipboard.writeText(replaceVariables(step.content))}
+                  <button
+                    onClick={() => navigator.clipboard.writeText(replaceVariables(step.content)).catch(() => {})}
                     className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-lg transition-all flex items-center gap-2 text-xs font-semibold"
                   >
                     <Copy size={14} /> Copiar
@@ -429,8 +421,8 @@ function AgentView({ speeches, onEditRequested }: { speeches: Speech[], onEditRe
   );
 }
 
-function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: { 
-  speeches: Speech[], 
+function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
+  speeches: Speech[],
   onUpdate: (s: Speech[]) => void,
   initialEditSpeech?: Speech | null,
   onEditHandled?: () => void
@@ -458,7 +450,7 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingSpeech) return;
-    
+
     const index = speeches.findIndex(s => s.id === editingSpeech.id);
     if (index > -1) {
       const newSpeeches = [...speeches];
@@ -486,9 +478,9 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-wh-darkblue">Tus Estrategias Comerciales</h2>
-        <button 
+        <button
           onClick={createNew}
-          className="bg-button-primary bg-wh-blue text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:shadow-xl transition-all"
+          className="bg-wh-blue text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg hover:shadow-xl transition-all"
         >
           <Plus size={20} /> Crear Nuevo Speach
         </button>
@@ -506,13 +498,13 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
                 <p className="text-xs text-wh-grey font-bold uppercase tracking-widest">{s.steps.length} Pasos · {s.objections.length} Objeciones</p>
               </div>
               <div className="flex gap-1">
-                <button 
+                <button
                   onClick={() => setEditingSpeech(s)}
                   className="p-2 text-wh-teslagrey hover:text-wh-blue hover:bg-slate-100 rounded-lg transition-all"
                 >
                   <Settings size={18} />
                 </button>
-                <button 
+                <button
                   onClick={() => handleDelete(s.id)}
                   className="p-2 text-wh-teslagrey hover:text-red-500 hover:bg-slate-100 rounded-lg transition-all"
                 >
@@ -520,7 +512,7 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
                 </button>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setPreviewSpeech(s)}
               className="w-full py-2 text-sm font-bold text-wh-blue bg-white border border-wh-blue/20 rounded-xl hover:bg-wh-blue hover:text-white transition-all"
             >
@@ -534,7 +526,7 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
       <AnimatePresence>
         {previewSpeech && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 backdrop-blur-sm">
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -574,7 +566,7 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
                 )}
               </div>
               <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-center">
-                <button 
+                <button
                   onClick={() => {
                     setEditingSpeech(previewSpeech);
                     setPreviewSpeech(null);
@@ -589,191 +581,194 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
         )}
       </AnimatePresence>
 
-
-      {editingSpeech && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 backdrop-blur-sm">
-          <motion.div 
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl flex flex-col"
-          >
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between shrink-0">
-              <h3 className="text-xl font-bold">Editar Estrategia: {editingSpeech.name}</h3>
-              <button 
-                onClick={handleClose}
-                className="p-2 hover:bg-slate-100 rounded-full transition-all"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSave} className="overflow-y-auto p-8 space-y-8 flex-grow">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Nombre del Guion</label>
-                  <input 
-                    type="text"
-                    value={editingSpeech.name}
-                    onChange={e => setEditingSpeech({...editingSpeech, name: e.target.value})}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-wh-blue transition-all outline-none"
-                    placeholder="Ej: Campaña Mayo"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Campaña / Tags</label>
-                  <input 
-                    type="text"
-                    value={editingSpeech.campaign}
-                    onChange={e => setEditingSpeech({...editingSpeech, campaign: e.target.value})}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-wh-blue transition-all outline-none"
-                    placeholder="Ej: Florida Solar"
-                  />
-                </div>
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {editingSpeech && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl flex flex-col"
+            >
+              <div className="p-6 border-b border-slate-100 flex items-center justify-between shrink-0">
+                <h3 className="text-xl font-bold">Editar Estrategia: {editingSpeech.name}</h3>
+                <button
+                  onClick={handleClose}
+                  className="p-2 hover:bg-slate-100 rounded-full transition-all"
+                >
+                  <X size={24} />
+                </button>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-wh-blue">Pasos del Guion</h4>
-                  <button 
-                    type="button"
-                    onClick={() => setEditingSpeech({
-                      ...editingSpeech, 
-                      steps: [...editingSpeech.steps, { id: Date.now().toString(), title: `Paso ${editingSpeech.steps.length+1}`, subtitle: '', content: '' }]
-                    })}
-                    className="text-xs font-bold bg-wh-blue/10 text-wh-blue px-3 py-1.5 rounded-full flex items-center gap-1"
-                  >
-                    <Plus size={14} /> Añadir Paso
-                  </button>
+              <form onSubmit={handleSave} className="overflow-y-auto p-8 space-y-8 flex-grow">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Nombre del Guion</label>
+                    <input
+                      type="text"
+                      value={editingSpeech.name}
+                      onChange={e => setEditingSpeech({...editingSpeech, name: e.target.value})}
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-wh-blue transition-all outline-none"
+                      placeholder="Ej: Campaña Mayo"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Campaña / Tags</label>
+                    <input
+                      type="text"
+                      value={editingSpeech.campaign}
+                      onChange={e => setEditingSpeech({...editingSpeech, campaign: e.target.value})}
+                      className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-wh-blue transition-all outline-none"
+                      placeholder="Ej: Florida Solar"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-6">
-                  {editingSpeech.steps.map((step, idx) => (
-                    <div key={step.id} className="relative p-6 border border-wh-lightblue/20 rounded-2xl bg-white shadow-sm group">
-                      <button 
-                        type="button"
-                        onClick={() => setEditingSpeech({
-                          ...editingSpeech,
-                          steps: editingSpeech.steps.filter(s => s.id !== step.id)
-                        })}
-                        className="absolute -top-2 -right-2 p-1.5 bg-white border border-slate-200 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        <input 
-                          type="text"
-                          value={step.title}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-wh-blue">Pasos del Guion</h4>
+                    <button
+                      type="button"
+                      onClick={() => setEditingSpeech({
+                        ...editingSpeech,
+                        steps: [...editingSpeech.steps, { id: Date.now().toString(), title: `Paso ${editingSpeech.steps.length+1}`, subtitle: '', content: '' }]
+                      })}
+                      className="text-xs font-bold bg-wh-blue/10 text-wh-blue px-3 py-1.5 rounded-full flex items-center gap-1"
+                    >
+                      <Plus size={14} /> Añadir Paso
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {editingSpeech.steps.map((step, idx) => (
+                      <div key={step.id} className="relative p-6 border border-wh-lightblue/20 rounded-2xl bg-white shadow-sm group">
+                        <button
+                          type="button"
+                          onClick={() => setEditingSpeech({
+                            ...editingSpeech,
+                            steps: editingSpeech.steps.filter(s => s.id !== step.id)
+                          })}
+                          className="absolute -top-2 -right-2 p-1.5 bg-white border border-slate-200 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <input
+                            type="text"
+                            value={step.title}
+                            onChange={e => {
+                              const newSteps = [...editingSpeech.steps];
+                              newSteps[idx].title = e.target.value;
+                              setEditingSpeech({...editingSpeech, steps: newSteps});
+                            }}
+                            className="p-2 border-b border-wh-lightblue/30 focus:border-wh-blue transition-all outline-none font-bold text-sm text-wh-darkblue"
+                            placeholder="Título del Paso"
+                          />
+                          <input
+                            type="text"
+                            value={step.subtitle}
+                            onChange={e => {
+                              const newSteps = [...editingSpeech.steps];
+                              newSteps[idx].subtitle = e.target.value;
+                              setEditingSpeech({...editingSpeech, steps: newSteps});
+                            }}
+                            className="p-2 border-b border-wh-lightblue/30 focus:border-wh-blue transition-all outline-none text-sm text-wh-grey font-medium"
+                            placeholder="Propósito / Subtítulo"
+                          />
+                        </div>
+                        <textarea
+                          value={step.content}
                           onChange={e => {
                             const newSteps = [...editingSpeech.steps];
-                            newSteps[idx].title = e.target.value;
+                            newSteps[idx].content = e.target.value;
                             setEditingSpeech({...editingSpeech, steps: newSteps});
                           }}
-                          className="p-2 border-b border-wh-lightblue/30 focus:border-wh-blue transition-all outline-none font-bold text-sm text-wh-darkblue"
-                          placeholder="Título del Paso"
-                        />
-                        <input 
-                          type="text"
-                          value={step.subtitle}
-                          onChange={e => {
-                            const newSteps = [...editingSpeech.steps];
-                            newSteps[idx].subtitle = e.target.value;
-                            setEditingSpeech({...editingSpeech, steps: newSteps});
-                          }}
-                          className="p-2 border-b border-wh-lightblue/30 focus:border-wh-blue transition-all outline-none text-sm text-wh-grey font-medium"
-                          placeholder="Propósito / Subtítulo"
+                          rows={4}
+                          className="w-full p-4 bg-slate-50 rounded-xl text-wh-black text-sm focus:ring-2 focus:ring-wh-blue outline-none border border-transparent focus:border-transparent"
+                          placeholder='Usa [variable] para insertar campos dinámicos. Ej: "Hola [nombre]..." '
                         />
                       </div>
-                      <textarea 
-                        value={step.content}
-                        onChange={e => {
-                          const newSteps = [...editingSpeech.steps];
-                          newSteps[idx].content = e.target.value;
-                          setEditingSpeech({...editingSpeech, steps: newSteps});
-                        }}
-                        rows={4}
-                        className="w-full p-4 bg-slate-50 rounded-xl text-wh-black text-sm focus:ring-2 focus:ring-wh-blue outline-none border border-transparent focus:border-transparent"
-                        placeholder='Usa [variable] para insertar campos dinámicos. Ej: "Hola [nombre]..." '
-                      />
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-sm font-bold uppercase tracking-widest text-wh-orange">Manejo de Objeciones</h4>
-                  <button 
-                    type="button"
-                    onClick={() => setEditingSpeech({
-                      ...editingSpeech, 
-                      objections: [...editingSpeech.objections, { id: Date.now().toString(), trigger: '', response: '' }]
-                    })}
-                    className="text-xs font-bold bg-wh-orange/10 text-wh-orange px-3 py-1.5 rounded-full flex items-center gap-1 hover:bg-wh-orange/20 transition-all"
-                  >
-                    <Plus size={14} /> Añadir Objeción
-                  </button>
-                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-wh-orange">Manejo de Objeciones</h4>
+                    <button
+                      type="button"
+                      onClick={() => setEditingSpeech({
+                        ...editingSpeech,
+                        objections: [...editingSpeech.objections, { id: Date.now().toString(), trigger: '', response: '' }]
+                      })}
+                      className="text-xs font-bold bg-wh-orange/10 text-wh-orange px-3 py-1.5 rounded-full flex items-center gap-1 hover:bg-wh-orange/20 transition-all"
+                    >
+                      <Plus size={14} /> Añadir Objeción
+                    </button>
+                  </div>
 
-                <div className="grid grid-cols-1 gap-4">
-                  {editingSpeech.objections.map((obj, idx) => (
-                    <div key={obj.id} className="relative p-6 border border-wh-orange/10 rounded-2xl bg-wh-orange/5 group">
-                      <button 
-                        type="button"
-                        onClick={() => setEditingSpeech({
-                          ...editingSpeech,
-                          objections: editingSpeech.objections.filter(o => o.id !== obj.id)
-                        })}
-                        className="absolute -top-2 -right-2 p-1.5 bg-white border border-slate-200 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                      <div className="space-y-3">
-                        <input 
-                          type="text"
-                          value={obj.trigger}
-                          onChange={e => {
-                            const newObjs = [...editingSpeech.objections];
-                            newObjs[idx].trigger = e.target.value;
-                            setEditingSpeech({...editingSpeech, objections: newObjs});
-                          }}
-                          className="w-full p-2 bg-white border border-wh-orange/20 rounded-lg text-sm font-bold text-wh-orange outline-none focus:ring-1 focus:ring-wh-orange"
-                          placeholder="Lo que dice el cliente (ej: No tengo dinero)"
-                        />
-                        <textarea 
-                          value={obj.response}
-                          onChange={e => {
-                            const newObjs = [...editingSpeech.objections];
-                            newObjs[idx].response = e.target.value;
-                            setEditingSpeech({...editingSpeech, objections: newObjs});
-                          }}
-                          rows={2}
-                          className="w-full p-3 bg-white border border-wh-orange/20 rounded-lg text-wh-black text-sm outline-none focus:ring-1 focus:ring-wh-orange"
-                          placeholder="Tu respuesta sugerida..."
-                        />
+                  <div className="grid grid-cols-1 gap-4">
+                    {editingSpeech.objections.map((obj, idx) => (
+                      <div key={obj.id} className="relative p-6 border border-wh-orange/10 rounded-2xl bg-wh-orange/5 group">
+                        <button
+                          type="button"
+                          onClick={() => setEditingSpeech({
+                            ...editingSpeech,
+                            objections: editingSpeech.objections.filter(o => o.id !== obj.id)
+                          })}
+                          className="absolute -top-2 -right-2 p-1.5 bg-white border border-slate-200 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                        <div className="space-y-3">
+                          <input
+                            type="text"
+                            value={obj.trigger}
+                            onChange={e => {
+                              const newObjs = [...editingSpeech.objections];
+                              newObjs[idx].trigger = e.target.value;
+                              setEditingSpeech({...editingSpeech, objections: newObjs});
+                            }}
+                            className="w-full p-2 bg-white border border-wh-orange/20 rounded-lg text-sm font-bold text-wh-orange outline-none focus:ring-1 focus:ring-wh-orange"
+                            placeholder="Lo que dice el cliente (ej: No tengo dinero)"
+                          />
+                          <textarea
+                            value={obj.response}
+                            onChange={e => {
+                              const newObjs = [...editingSpeech.objections];
+                              newObjs[idx].response = e.target.value;
+                              setEditingSpeech({...editingSpeech, objections: newObjs});
+                            }}
+                            rows={2}
+                            className="w-full p-3 bg-white border border-wh-orange/20 rounded-lg text-wh-black text-sm outline-none focus:ring-1 focus:ring-wh-orange"
+                            placeholder="Tu respuesta sugerida..."
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
 
-            <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 shrink-0">
-              <button 
-                type="button"
-                onClick={handleClose}
-                className="px-6 py-2.5 rounded-xl font-bold text-wh-grey hover:bg-slate-200 transition-all"
-              >
-                Cancelar
-              </button>
-              <button 
-                onClick={handleSave}
-                className="px-8 py-2.5 bg-wh-blue text-white rounded-xl font-bold shadow-lg shadow-wh-blue/20 flex items-center gap-2"
-              >
-                <Save size={18} /> Guardar Estrategia
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
+              <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="px-6 py-2.5 rounded-xl font-bold text-wh-grey hover:bg-slate-200 transition-all"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="px-8 py-2.5 bg-wh-blue text-white rounded-xl font-bold shadow-lg shadow-wh-blue/20 flex items-center gap-2"
+                >
+                  <Save size={18} /> Guardar Estrategia
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
