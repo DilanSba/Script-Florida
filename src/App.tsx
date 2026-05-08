@@ -56,20 +56,20 @@ const RETENTION_CHECKLISTS = [
     title: 'Información del Deal',
     items: [
       { id: 'c1', text: 'Nombre completo y cómo prefiere que lo llamen' },
-      { id: 'c2', text: 'Leer notas del Deal completo — identificar tono de la cancelación (frustración, duda, presión económica)' },
-      { id: 'c3', text: 'Motivo oficial de Closed Lost registrado en CRM' },
-      { id: 'c4', text: 'Nombre del consultor original — NO mencionarlo si hay quejas sobre él' },
+      { id: 'c2', text: 'Leer notas del Deal completo: notas de Main page + notas del módulo de etapa en la que se encuentra el proyecto — identificar tono de la cancelación (frustración, duda, presión económica)' },
+      { id: 'c3', text: 'Motivo de Closed Lost en CRM — si es "Other", revisar detalles en las notas del Main page' },
+      { id: 'c4', text: 'Nombre del consultor (verificar si tiene Sales Assist — cuando hay Sales Assist usualmente indica que fue el cerrador o asistió en la venta)' },
       { id: 'c5', text: 'Fecha del cierre — calcular cuántos días han pasado' },
     ],
   },
   {
     id: 'ntp',
-    title: 'Sección NTP — Notas técnicas',
+    title: 'Sección Pre Ingeniería — ENG Findings / NTP',
     items: [
       { id: 'n1', text: 'Tamaño del sistema (kW) cotizado al cliente' },
       { id: 'n2', text: 'Número de paneles, modelo de inversor o batería si aplica' },
       { id: 'n3', text: 'Estimado de ahorro mensual o anual documentado por el técnico' },
-      { id: 'n4', text: '¿Hubo visita de NTP? ¿Qué se encontró en el techo/propiedad?' },
+      { id: 'n4', text: 'Visita de pre ingeniería — revisar ENG Findings en módulo de Pre Eng o NTP (detalles de techo, condiciones del hogar, hallazgos técnicos)' },
       { id: 'n5', text: 'Condiciones especiales del hogar (sombra, tipo de techo, HOA)' },
     ],
   },
@@ -732,13 +732,15 @@ function RetentionPreCallTab({ checked, onToggle }: { checked: Set<string>; onTo
 function RetentionAperturaTab() {
   const copy = (text: string) => navigator.clipboard.writeText(text).catch(() => {});
 
-  const aperturaScript = `"Buenos días/tardes, ¿podría hablar con [Nombre]?
+  const parte1Script = `"Buenos días/tardes, ¿podría hablar con [Nombre]?
 
 …[Nombre], qué gusto. Mi nombre es [Tu nombre], le llamo de parte de Windmar Home.
 
-Le contacto porque usted tuvo un proceso con nosotros y quiero asegurarme personalmente de que quedó bien atendido — entendemos que el proceso no pudo continuar en su momento, y hoy simplemente quería escucharle, ver si ha habido algún cambio en su situación o si quedó alguna pregunta sin respuesta."`;
+Me comunico con usted para asegurarme personalmente de que fue bien atendido y recibió un buen servicio de parte de nuestra compañía.
 
-  const sondeoScript = `"Para empezar, ¿me podría contar brevemente qué fue lo que llevó a que el proceso quedara en pausa en ese momento?"`;
+¿Me puede hablar de su experiencia? ¿Me puede compartir cómo fue su proceso?"`;
+
+  const parte2Script = `"Gracias por compartirlo conmigo. Entiendo que el proceso no pudo continuar en su momento, y quería confirmar si ha habido algún cambio en su situación o si le quedó alguna duda sin respuesta."`;
 
   const listeningPhrases = [
     '"Entiendo perfectamente, eso tiene mucho sentido…"',
@@ -747,48 +749,47 @@ Le contacto porque usted tuvo un proceso con nosotros y quiero asegurarme person
     '"Le escucho. Precisamente por eso le llamamos hoy…"',
   ];
 
-  const reasonsBadge = [
-    { text: '⏱ Máx. 20 seg' }, { text: '🎙 Tono cálido y seguro' },
-    { text: '🚫 Sin mencionar cancelación' }, { text: '🚫 Sin preguntar si tiene tiempo' },
-    { text: '▶ Flujo continuo sin pausas' },
-  ];
-
   return (
     <div className="space-y-5">
-      {/* Fase 1 */}
+
+      {/* Info estratégica */}
+      <div className="flex items-start gap-3 p-4 bg-wh-blue/5 rounded-2xl border border-wh-blue/20">
+        <AlertCircle size={16} className="text-wh-blue mt-0.5 shrink-0" />
+        <p className="text-sm text-wh-blue leading-relaxed">
+          <strong>Principio de la apertura:</strong> Hacer una pausa después del saludo y dejar que el cliente cuente su experiencia. Esto le da la oportunidad de expresarse — mientras habla, el asesor toma nota indirectamente de sus preocupaciones para luego entrar a la parte de recuperar o retener.
+        </p>
+      </div>
+
+      {/* Fase 1 — Saludo + pregunta de experiencia */}
       <div className="bg-white rounded-2xl shadow-sm border border-emerald-200 overflow-hidden">
         <div className="p-4 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 bg-emerald-600 text-white text-[11px] font-bold rounded-lg">Fase 1</span>
             <div>
-              <h3 className="font-bold text-emerald-900">Saludo + propósito — flujo directo</h3>
-              <p className="text-[10px] text-emerald-700 font-semibold uppercase tracking-wider">v4 · Sin pausas estratégicas</p>
+              <h3 className="font-bold text-emerald-900">Saludo + pregunta de experiencia</h3>
+              <p className="text-[10px] text-emerald-700 font-semibold uppercase tracking-wider">Representante de retención</p>
             </div>
           </div>
-          <button onClick={() => copy(aperturaScript)}
+          <button onClick={() => copy(parte1Script)}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition-all">
             <Copy size={12} /> Copiar
           </button>
         </div>
-        <div className="flex items-center gap-3 px-5 py-3 bg-amber-50 border-b border-amber-100">
-          <AlertCircle size={15} className="text-amber-600 shrink-0" />
-          <p className="text-xs text-amber-700 font-semibold">Duración máxima 20 segundos. Sin pausas que den ventana al cliente para cortar.</p>
-        </div>
         <div className="p-6">
           <div className="border-l-4 border-emerald-400 bg-emerald-50/40 rounded-r-2xl px-5 py-4">
-            <p className="text-sm leading-loose text-emerald-900 italic whitespace-pre-line font-medium">{aperturaScript}</p>
+            <p className="text-sm leading-loose text-emerald-900 italic whitespace-pre-line font-medium">{parte1Script}</p>
           </div>
           <div className="flex flex-wrap gap-2 mt-4">
-            {reasonsBadge.map(p => (
-              <span key={p.text} className="text-[11px] px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-wh-grey font-medium">{p.text}</span>
+            {['🎙 Tono cálido y seguro', '🚫 Sin mencionar cancelación directamente', '⏸ Pausa intencional después de preguntar'].map(p => (
+              <span key={p} className="text-[11px] px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-wh-grey font-medium">{p}</span>
             ))}
           </div>
           <div className="mt-5 border-t border-slate-100 pt-5 space-y-3">
             <p className="text-[10px] font-black text-wh-blue uppercase tracking-widest">Por qué funciona así</p>
             {[
-              { n: '1', text: '"Qué gusto" — personaliza el saludo y baja la guardia antes de que el cliente active el modo defensa.' },
-              { n: '2', text: '"Asegurarme personalmente de que quedó bien atendido" — el cliente no siente que lo llaman a venderle.' },
-              { n: '3', text: 'Sin pausas estratégicas — el asesor fluye directo al propósito empático y el cliente ya está dentro antes de poder cortarla.' },
+              { n: '1', text: '"Me comunico para asegurarme de que fue bien atendido" — el cliente no siente que lo llaman a venderle. Transmite atención individual.' },
+              { n: '2', text: 'Preguntar por su experiencia abre la conversación: el cliente habla, el asesor escucha y toma nota mental de sus preocupaciones reales.' },
+              { n: '3', text: 'Dejar que responda permite identificar el motivo real — que puede diferir del registrado en el CRM.' },
             ].map(item => (
               <div key={item.n} className="flex gap-3 items-start">
                 <span className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[11px] font-bold text-wh-grey shrink-0 mt-0.5">{item.n}</span>
@@ -802,30 +803,43 @@ Le contacto porque usted tuvo un proceso con nosotros y quiero asegurarme person
         </div>
       </div>
 
-      <div className="flex justify-center text-slate-300"><ChevronRight size={28} className="rotate-90" /></div>
+      {/* Pausa — Dejar que responda */}
+      <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-2">
+          <ChevronRight size={24} className="rotate-90 text-slate-300" />
+          <div className="flex items-center gap-3 px-6 py-3 bg-wh-darkblue rounded-2xl border border-wh-darkblue/80 shadow-md">
+            <span className="text-lg">⏸</span>
+            <div>
+              <p className="text-white font-black text-sm tracking-wide">DEJAR QUE RESPONDA</p>
+              <p className="text-white/70 text-[10px] font-medium">Escuchar sin interrumpir · Tomar nota de las preocupaciones</p>
+            </div>
+          </div>
+          <ChevronRight size={24} className="rotate-90 text-slate-300" />
+        </div>
+      </div>
 
-      {/* Fase 2 */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+      {/* Fase 2 — Respuesta después de escuchar */}
+      <div className="bg-white rounded-2xl shadow-sm border border-wh-blue/30 overflow-hidden">
+        <div className="p-4 bg-wh-blue/5 border-b border-wh-blue/15 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 bg-wh-blue text-white text-[11px] font-bold rounded-lg">Fase 2</span>
             <div>
-              <h3 className="font-bold text-wh-darkblue">Pregunta de sondeo</h3>
-              <p className="text-[10px] text-wh-grey font-semibold uppercase tracking-wider">Escuchar mínimo 60 seg</p>
+              <h3 className="font-bold text-wh-darkblue">Acuse + pivote a situación actual</h3>
+              <p className="text-[10px] text-wh-grey font-semibold uppercase tracking-wider">Representante de retención · después de escuchar</p>
             </div>
           </div>
-          <button onClick={() => copy(sondeoScript)}
+          <button onClick={() => copy(parte2Script)}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-wh-blue text-white text-xs font-bold rounded-lg hover:bg-wh-darkblue transition-all">
             <Copy size={12} /> Copiar
           </button>
         </div>
         <div className="p-6 space-y-4">
           <div className="border-l-4 border-wh-blue bg-slate-50 rounded-r-2xl px-5 py-4">
-            <p className="text-sm leading-loose text-wh-black italic font-medium">{sondeoScript}</p>
+            <p className="text-sm leading-loose text-wh-black italic font-medium">{parte2Script}</p>
           </div>
-          <p className="text-xs text-wh-grey">No interrumpir. Tomar nota del motivo real — puede diferir del Zoho. Con el motivo identificado, ir a la pestaña Rebates.</p>
+          <p className="text-xs text-wh-grey">Con esta frase se reconoce lo que dijo el cliente, se valida su situación y se abre la puerta para detectar si algo cambió o si quedó una duda sin resolver — sin presionar.</p>
           <div className="border-t border-slate-100 pt-4 space-y-2">
-            <p className="text-[10px] font-black text-wh-blue uppercase tracking-widest mb-3">Frases de escucha activa</p>
+            <p className="text-[10px] font-black text-wh-blue uppercase tracking-widest mb-3">Frases de escucha activa — durante la conversación</p>
             {listeningPhrases.map((frase, i) => (
               <div key={i} className="flex items-start gap-3">
                 <ChevronRight size={14} className="text-wh-blue mt-0.5 shrink-0" />
@@ -836,10 +850,11 @@ Le contacto porque usted tuvo un proceso con nosotros y quiero asegurarme person
         </div>
       </div>
 
+      {/* Ir a Rebates */}
       <div className="bg-white rounded-2xl shadow-sm border border-amber-200 p-5 flex items-center justify-between gap-4">
         <div>
           <p className="font-bold text-wh-darkblue text-sm">Motivo identificado →</p>
-          <p className="text-xs text-wh-grey mt-1">Con lo que dijo el cliente, aplica el rebate de la pestaña siguiente. El posicionamiento de marca no va aquí — va al cierre.</p>
+          <p className="text-xs text-wh-grey mt-1">Con lo que expresó el cliente, aplica el rebate correspondiente en la pestaña siguiente. El posicionamiento de marca no va aquí — va al cierre.</p>
         </div>
         <ChevronRight size={20} className="text-amber-500 shrink-0" />
       </div>
