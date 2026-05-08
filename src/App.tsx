@@ -24,6 +24,8 @@ import {
   ClipboardList,
   ShieldCheck,
   CalendarCheck,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -270,6 +272,11 @@ export default function App() {
   const [speeches, setSpeeches] = useState<Speech[]>([]);
   const [speechToEdit, setSpeechToEdit] = useState<Speech | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('windmar_dark') === 'true');
+
+  useEffect(() => {
+    localStorage.setItem('windmar_dark', String(darkMode));
+  }, [darkMode]);
 
   useEffect(() => {
     try {
@@ -302,7 +309,7 @@ export default function App() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className={`min-h-screen bg-slate-50 flex items-center justify-center${darkMode ? ' dark' : ''}`}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-wh-blue/20 border-t-wh-blue rounded-full animate-spin"></div>
           <p className="text-wh-grey font-bold animate-pulse uppercase tracking-widest text-xs">Cargando Windmar Console...</p>
@@ -312,8 +319,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
-      <nav className="bg-white border-b border-wh-lightblue/30 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
+    <div className={`min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 pb-12${darkMode ? ' dark' : ''}`}>
+      <nav className="bg-white dark:bg-slate-900 border-b border-wh-lightblue/30 dark:border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-3">
           <img
             src="https://i.postimg.cc/3NvQhzx3/Windmar-logo-FL.png"
@@ -322,23 +329,51 @@ export default function App() {
           />
           <p className="text-[10px] text-wh-grey font-bold tracking-wide uppercase tracking-[0.15em]">Florida Call Center</p>
         </div>
-        <div className="flex bg-slate-100 p-1 rounded-full border border-slate-200">
-          <button
-            onClick={() => setActiveMode('agent')}
-            className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
-              activeMode === 'agent' ? 'bg-white text-wh-blue shadow-md' : 'text-wh-grey hover:text-wh-black'
-            }`}
+
+        <div className="flex items-center gap-3">
+          {/* Dark mode toggle */}
+          <motion.button
+            onClick={() => setDarkMode(d => !d)}
+            whileTap={{ scale: 0.9 }}
+            className="relative w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-wh-grey dark:text-slate-300 hover:border-wh-blue/40 dark:hover:border-wh-blue/40 hover:text-wh-blue dark:hover:text-wh-blue transition-all"
+            title={darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
           >
-            Modo Asesor
-          </button>
-          <button
-            onClick={() => setActiveMode('manager')}
-            className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
-              activeMode === 'manager' ? 'bg-white text-wh-blue shadow-md' : 'text-wh-grey hover:text-wh-black'
-            }`}
-          >
-            Líder Comercial
-          </button>
+            <AnimatePresence mode="wait" initial={false}>
+              {darkMode ? (
+                <motion.span key="sun" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }} className="flex">
+                  <Sun size={17} />
+                </motion.span>
+              ) : (
+                <motion.span key="moon" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }} className="flex">
+                  <Moon size={17} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+
+          {/* Mode switcher */}
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-full border border-slate-200 dark:border-slate-700">
+            <button
+              onClick={() => setActiveMode('agent')}
+              className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                activeMode === 'agent'
+                  ? 'bg-white dark:bg-slate-700 text-wh-blue shadow-md'
+                  : 'text-wh-grey hover:text-wh-black dark:hover:text-slate-200'
+              }`}
+            >
+              Modo Asesor
+            </button>
+            <button
+              onClick={() => setActiveMode('manager')}
+              className={`px-6 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                activeMode === 'manager'
+                  ? 'bg-white dark:bg-slate-700 text-wh-blue shadow-md'
+                  : 'text-wh-grey hover:text-wh-black dark:hover:text-slate-200'
+              }`}
+            >
+              Líder Comercial
+            </button>
+          </div>
         </div>
       </nav>
 
