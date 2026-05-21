@@ -330,78 +330,86 @@ export function getDefaultSpeeches(lang: Lang): Speech[] {
     return [
       {
         id: 'cold-calling',
-        name: 'Cold Calling — Solar',
-        campaign: 'Prospección Fría',
+        name: 'Cold Calling — El Método de la Autoridad',
+        campaign: 'Auditoría Energética',
         steps: [
           {
             id: '1',
-            title: '1 · Apertura',
-            subtitle: 'Permiso + propósito claro en los primeros 10 segundos',
+            title: '1 · El Gancho',
+            subtitle: 'Primeros 15 segundos — sonar como experto local, no como vendedor',
             content:
-              '"Buenos días/tardes, ¿me podría comunicar con [nombre del titular]?\n\n[nombre del titular], le habla [nombre del asesor] de Windmar Home Solar aquí en [ciudad].\n\nLe llamo porque estamos trabajando con propietarios de vivienda en su área y hemos encontrado una forma de reducir significativamente la factura de [compania] — sin costo inicial.\n\n¿Le cuento en 30 segundos de qué se trata?"',
-            caution: 'Espera la respuesta antes de continuar. El "¿Le cuento?" convierte el monólogo en conversación y reduce el rechazo.',
+              '"Hola, ¿hablo con [nombre del titular]?\n\nQué tal, [nombre del titular], le habla [nombre del asesor] de Seguridad Energética Florida. No le quito más de un minuto.\n\nLe llamo porque estamos auditando las facturas de [compania] en la zona de [ciudad] debido a los nuevos cargos por hora pico que entraron en vigor.\n\n¿Usted ya recibió el ajuste en su factura o sigue pagando la tarifa fija?"',
+            caution: 'Tono de experto, no de vendedor. La pregunta final genera curiosidad y obliga a responder — nunca cuelgan después de una pregunta directa sobre su factura.',
           },
           {
             id: '2',
-            title: '2 · Cualificación',
-            subtitle: 'Confirmar que el cliente aplica antes de avanzar',
+            title: '2 · Identificación del Dolor',
+            subtitle: 'Que el cliente admita el problema con sus propias palabras',
             content:
-              '"Perfecto. Antes de contarle, déjeme hacerle dos preguntas rápidas para asegurarme de que esto aplica para su casa.\n\n¿Usted es el propietario de la vivienda donde vive actualmente?\n\n(Espera respuesta)\n\nY su factura de [compania], ¿está por encima de los $100 al mes en promedio?\n\n(Espera respuesta)\n\nPerfecto, entonces sí aplica para lo que estamos ofreciendo."',
-            caution: 'Si renta o la factura es baja, agradece su tiempo y no continúes. Calidad sobre cantidad en las citas.',
+              '"Le pregunto porque la mayoría de sus vecinos en [ciudad] están reportando recibos de más de $150, incluso teniendo sistemas que no funcionan bien.\n\nEn su caso, ¿su último recibo llegó por encima o por debajo de los $100?\n\n(Espera la respuesta)\n\n— Si tiene paneles que no funcionan —\n"Precisamente por eso llamamos. Muchas empresas instalaron y desaparecieron, dejando a la gente con la deuda y el recibo alto. Mi trabajo es que el ingeniero verifique por qué su sistema no está compensando su factura."',
+            caution: 'No interrumpas. Cuando el cliente habla de su dolor, está vendiendo la cita él solo. Tu trabajo aquí es escuchar y validar.',
           },
           {
             id: '3',
-            title: '3 · Propuesta de Valor',
-            subtitle: 'El problema (factura) → la solución (solar) → la prueba (Windmar)',
+            title: '3 · La Solución',
+            subtitle: 'Auditoría de Tasa Cero — crear curiosidad sin vender un producto',
             content:
-              '"Lo que hacemos en Windmar es instalar paneles solares en su hogar — con financiamiento a $0 de inicial — para que su cuota mensual del sistema sea igual o menor a lo que paga hoy a [compania].\n\nEn vez de pagarle a la eléctrica indefinidamente, ese dinero va a cubrir algo que al final usted termina siendo el dueño.\n\nWindmar lleva más de 15 años en Florida, hemos instalado miles de sistemas en el estado y nos respaldamos con garantías reales de producción — no desaparecemos después de la instalación.\n\nY lo mejor: hay incentivos federales del 30% disponibles este año que reducen considerablemente el costo total."',
+              '"Mire, lo que estamos haciendo es una Auditoría de Tasa Cero. Enviamos a un especialista de Windmar para que haga tres cosas:\n\n① Verificar que su medidor no esté marcando de más.\n\n② Revisar si califica para el programa de incentivos estatales para bajar el costo del kWh.\n\n③ Si tiene paneles viejos, ver cómo reactivarlos sin que le cueste de su bolsillo.\n\nEs una visita técnica — no es una presentación de ventas."',
+            caution: 'Nunca menciones "comprar paneles" en este paso. La palabra clave es "auditoría" — suena a derecho del consumidor, no a venta.',
           },
           {
             id: '4',
-            title: '4 · Cierre de Cita',
-            subtitle: 'Doble alternativa — nunca "¿le interesa?"',
+            title: '4 · Precualificación',
+            subtitle: 'Filtro de calidad — Dueño · Factura · Crédito',
             content:
-              '"Lo que le propongo es que uno de nuestros consultores pase por su casa — sin costo, sin compromiso — para hacer el análisis de su factura y mostrarle exactamente cuánto se ahorraría con paneles en su hogar específico.\n\nCIERRE A — DOBLE ALTERNATIVA\n"¿Le queda mejor que pasemos esta semana o prefiere la próxima? ¿Mañana en la mañana o mejor en la tarde?"\n\nCIERRE B — URGENCIA REAL\n"Tenemos un consultor cubriendo su área en los próximos días y los espacios se están llenando. ¿Cuál es el mejor día para usted esta semana?"',
-            caution: 'Nunca preguntes "¿Le gustaría una visita?" — da opción de decir no. Siempre dos alternativas concretas.',
+              '"Para que el ingeniero no le quite tiempo y vaya directo al grano, necesito verificar tres cosas rápidas:\n\n① ¿Usted es el propietario de la vivienda en [direccion]?\n\n② ¿Tiene a la mano su factura de [compania] — digital o papel — para que él pueda ver su historial de consumo?\n\n③ Para los programas de incentivos estatales, el estado pide un puntaje de salud financiera básico de 640–650. ¿Usted considera que está en ese rango, o prefiere que lo validemos también con su pareja?"',
+            caution: 'El punto ③ no es para rechazar al cliente — es para incluir a la pareja en la cita. "Prefiero validarlo con mi pareja" es una respuesta perfecta: significa que los dos estarán presentes.',
           },
           {
             id: '5',
-            title: '5 · Confirmación y Cierre',
-            subtitle: 'Repasar datos en voz alta antes de colgar',
+            title: '5 · Cierre de Doble Alternativa',
+            subtitle: 'No preguntar "si puede" — preguntar "cuándo puede"',
             content:
-              '"Perfecto, [nombre del titular]. Queda agendada la visita el [dia] en horas de la [horario] en [direccion].\n\nNuestro consultor llegará puntual y revisará su factura de [compania] para mostrarle el análisis completo. Si necesita contactarnos antes, con gusto le atendemos.\n\nFue un placer hablar con usted — y ya verá que esta conversación valdrá la pena."',
+              '"Perfecto. Tengo al ingeniero [nombre del ingeniero] en su zona el [dia] o el [horario]. Él solo necesita 15 minutos para entregarle el reporte de ahorro.\n\n¿Le queda mejor a las 5:00 pm o prefiere a las 7:00 pm para que también esté su esposo/a y no tengan que explicarle todo después?\n\n— Al confirmar la cita —\n"Estoy bloqueando la agenda del ingeniero [nombre del ingeniero] para el [dia] a las [horario]. Él viene desde lejos para verle. Por favor tenga a mano su última factura de [compania] — aunque sea en el celular — para que no pierda tiempo y le pueda dar los números exactos.\n\n¿Me promete que si surge algo me avisa antes para no hacerle perder el viaje?"',
+            caution: 'El cierre con "¿me promete?" activa el compromiso verbal y reduce los no-shows drásticamente. Es el paso más importante del guion.',
           },
         ],
         objections: [
           {
             id: 'o1',
-            trigger: 'No me interesa / No necesito',
+            trigger: 'Tengo paneles y no sirven / La empresa desapareció',
             response:
-              '"Lo entiendo perfectamente. Puedo preguntarle algo: ¿su factura de luz ha subido en el último año? Porque lo que ofrecemos no es un producto — es una forma de que ese dinero que ya gasta cada mes trabaje para usted en lugar de irse a la eléctrica. Solo 20 minutos con nuestro consultor y usted decide con información real."',
+              '"Sr./Sra. [nombre del titular], le entiendo perfectamente y, de hecho, esa es la razón principal de mi llamada. Windmar está liderando un programa de \'Rescate Energético\' en [ciudad]. Hay cientos de personas en su misma situación con sistemas huérfanos.\n\nMi ingeniero no va a venderle nada nuevo — va a auditar su sistema actual para ver cómo podemos reactivarlo y que por fin deje de pagarle a la eléctrica lo que ya debería estar ahorrando.\n\n¿Vale la pena dedicarle 15 minutos para recuperar su inversión, no cree?"',
           },
           {
             id: 'o2',
-            trigger: 'Ya tengo solar / Ya lo investigué',
+            trigger: 'No me interesa / No quiero paneles',
             response:
-              '"Me alegra. ¿Su instalación fue con una empresa local o con una nacional? Le pregunto porque varios propietarios en el área que instalaron con Freedom Forever o con empresas que ya cerraron, hoy están sin garantía activa. Si el suyo está bien cubierto, perfecto — pero vale la pena verificarlo sin costo."',
+              '"Le comprendo, a nadie le interesa comprar más deudas. Pero mi llamada no es por los paneles — es por el aumento abusivo de la tarifa de [compania] que entró en vigor hace poco.\n\nNuestra auditoría es para que usted sepa cómo proteger su bolsillo, con o sin paneles. Es información técnica de su propiedad que usted tiene derecho a conocer.\n\n¿Le queda mejor recibir el reporte mañana por la tarde o el sábado?"',
           },
           {
             id: 'o3',
-            trigger: 'No tengo dinero / No puedo pagar',
+            trigger: 'Estoy en bancarrota / No tengo dinero',
             response:
-              '"Justo por eso le llamo. El sistema se instala a $0 de inicial. La cuota mensual del financiamiento está diseñada para ser igual o menor a lo que paga hoy de luz. Muchos clientes terminan pagando menos desde el primer mes. No es un gasto adicional — es un intercambio."',
+              '"Siento mucho escuchar eso, y precisamente por eso esta visita es 100% gratuita y sin compromiso.\n\nEl estado tiene programas de incentivos para personas que necesitan bajar sus gastos mensuales obligatorios — como la luz — sin tener que invertir un solo dólar de su bolsillo. Mi trabajo es ver si su casa califica para esos subsidios.\n\nSi no califica, no pasa nada — al menos ya tiene la información. ¿Le parece bien el lunes a las 2:00 pm?"',
           },
           {
             id: 'o4',
-            trigger: 'Mándeme información por email',
+            trigger: 'Mándame la información por correo / WhatsApp',
             response:
-              '"Con gusto le envío algo, pero la realidad es que los números son distintos para cada casa según el techo, el consumo y la factura. Lo que le mande no va a ser tan preciso como el análisis personalizado que hace nuestro consultor en 20 minutos. ¿Qué día tiene disponible esta semana para que pasemos?"',
+              '"Me encantaría enviárselo, pero sería una falta de respeto de mi parte mandarle algo genérico.\n\nLa información de ahorro depende del estado de su techo, la orientación de su casa y su historial de consumo de [compania]. Si le envío algo ahora, no serían números reales.\n\nEl ingeniero se lo entrega todo por escrito en 15 minutos tras ver su medidor. ¿Mañana a las 6:00 pm está en casa?"',
           },
           {
             id: 'o5',
-            trigger: 'Tengo que hablar con mi esposo/a',
+            trigger: '¿De dónde sacaron mi número?',
             response:
-              '"Claro, es una decisión de hogar. De hecho, la visita de nuestro consultor está pensada para que ambos la vean juntos — así tienen toda la información al mismo tiempo y pueden decidir con calma. ¿Cuándo están los dos disponibles?"',
+              '"Buena pregunta. Trabajamos con bases de datos públicas de registros de la propiedad en la zona de [ciudad]. Filtramos las casas que, por su tamaño y ubicación, están siendo más afectadas por los nuevos cargos de \'horas pico\' de [compania].\n\nQueremos ayudar a los propietarios de esta área específicamente.\n\nPor cierto — ¿usted es el dueño de la propiedad o renta?"',
+          },
+          {
+            id: 'o6',
+            trigger: 'Tengo que hablarlo con mi esposo/a',
+            response:
+              '"¡Excelente! De hecho, es indispensable que estén ambos. Como es una auditoría que afecta el valor de la propiedad y el crédito del hogar, pedimos que los dos estén presentes para que no haya dudas ni tenga que explicarlo después.\n\nEs mejor que ambos escuchen cómo proteger su crédito y su casa de las subidas de [compania].\n\n¿A qué hora llegan ambos del trabajo para que el ingeniero los visite y les explique a los dos al mismo tiempo?"',
           },
         ],
       },
@@ -493,78 +501,86 @@ export function getDefaultSpeeches(lang: Lang): Speech[] {
   return [
     {
       id: 'cold-calling',
-      name: 'Cold Calling — Solar',
-      campaign: 'Cold Prospecting',
+      name: 'Cold Calling — The Authority Method',
+      campaign: 'Energy Audit',
       steps: [
         {
           id: '1',
-          title: '1 · Opening',
-          subtitle: 'Permission + clear purpose in the first 10 seconds',
+          title: '1 · The Hook',
+          subtitle: 'First 15 seconds — sound like a local expert, not a salesperson',
           content:
-            '"Good morning/afternoon, may I speak with [homeowner]?\n\n[homeowner], this is [advisor] calling from Windmar Home Solar here in [city].\n\nI\'m reaching out because we\'re working with homeowners in your area and we\'ve found a way to significantly reduce your [company] bill — with zero upfront cost.\n\nCan I share what it\'s about in 30 seconds?"',
-          caution: 'Wait for their response before continuing. The "Can I share?" turns the monologue into a conversation and reduces hang-ups.',
+            '"Hi, am I speaking with [homeowner]?\n\n[homeowner], this is [advisor] from Florida Energy Security. I\'ll only take a minute of your time.\n\nI\'m calling because we\'re auditing [company] bills in the [city] area due to the new peak-hour charges that recently went into effect.\n\nHave you already seen the adjustment on your bill, or are you still on the flat rate?"',
+          caution: 'Expert tone, not salesperson tone. The closing question creates curiosity and demands a response — people almost never hang up after a direct question about their own bill.',
         },
         {
           id: '2',
-          title: '2 · Qualification',
-          subtitle: 'Confirm the customer qualifies before moving forward',
+          title: '2 · Pain Identification',
+          subtitle: 'Let the customer admit the problem in their own words',
           content:
-            '"Great. Before I go into detail, let me ask two quick questions to make sure this applies to your home.\n\nAre you the owner of the home you currently live in?\n\n(Wait for response)\n\nAnd is your [company] bill typically above $100 a month on average?\n\n(Wait for response)\n\nPerfect — that means you do qualify for what we\'re offering."',
-          caution: 'If they rent or the bill is low, thank them and move on. Quality over quantity in appointments.',
+            '"I ask because most of your neighbors in [city] are reporting bills over $150 — even those with solar systems that aren\'t working properly.\n\nIn your case, did your last bill come in above or below $100?\n\n(Wait for response)\n\n— If they have panels that don\'t work —\n"That\'s exactly why we\'re calling. Many companies installed systems and then vanished, leaving people with the debt and the high bill. My job is to have the engineer check why your system isn\'t offsetting your bill."',
+          caution: 'Don\'t interrupt. When the customer talks about their pain, they\'re selling themselves on the appointment. Your job here is to listen and validate.',
         },
         {
           id: '3',
-          title: '3 · Value Proposition',
-          subtitle: 'The problem (bill) → the solution (solar) → the proof (Windmar)',
+          title: '3 · The Solution',
+          subtitle: 'Zero-Rate Audit — create curiosity without selling a product',
           content:
-            '"What we do at Windmar is install solar panels on your home — with $0 down financing — so that your monthly system payment is equal to or less than what you\'re currently paying [company].\n\nInstead of sending that money to the utility company indefinitely, it goes toward something you end up owning.\n\nWindmar has been in Florida for over 15 years. We\'ve installed thousands of systems across the state and we back everything with real production warranties — we don\'t disappear after installation.\n\nAnd the best part: 30% federal tax incentives are available this year, which significantly reduces the total cost."',
+            '"Here\'s what we\'re doing: a Zero-Rate Audit. We send a Windmar specialist to do three things:\n\n① Verify that your meter isn\'t overcharging you.\n\n② Check whether you qualify for the state incentive program to lower your cost per kWh.\n\n③ If you have older panels, see how we can reactivate them at no out-of-pocket cost.\n\nThis is a technical visit — not a sales presentation."',
+          caution: 'Never say "buy panels" at this stage. The key word is "audit" — it sounds like a consumer right, not a sale.',
         },
         {
           id: '4',
-          title: '4 · Appointment Close',
-          subtitle: 'Double alternative — never "are you interested?"',
+          title: '4 · Pre-Qualification',
+          subtitle: 'Quality filter — Owner · Bill · Credit',
           content:
-            '"What I\'d like to propose is having one of our consultants stop by your home — no cost, no commitment — to analyze your bill and show you exactly how much you\'d save with solar on your specific home.\n\nCLOSE A — DOUBLE ALTERNATIVE\n"Would it work better to stop by this week or next? Morning or afternoon?"\n\nCLOSE B — REAL URGENCY\n"We have a consultant covering your area over the next few days and slots are filling up. Which day works best for you this week?"',
-          caution: 'Never ask "Would you like a visit?" — it gives them the option to say no. Always offer two concrete choices.',
+            '"So the engineer doesn\'t waste your time and goes straight to the point, I need to verify three quick things:\n\n① Are you the owner of the property at [address]?\n\n② Do you have your [company] bill handy — digital or paper — so he can review your consumption history?\n\n③ For the state incentive programs, they require a basic financial health score of 640–650. Do you think you\'re in that range, or would you prefer we also verify with your partner?"',
+          caution: 'Point ③ is not to screen out the customer — it\'s to get the spouse on the call. "I\'d rather check with my partner" is a perfect answer: it means both will be present at the appointment.',
         },
         {
           id: '5',
-          title: '5 · Confirmation & Close',
-          subtitle: 'Repeat all details out loud before hanging up',
+          title: '5 · Double Alternative Close',
+          subtitle: 'Don\'t ask "if they can" — ask "when they can"',
           content:
-            '"Perfect, [homeowner]. The visit is confirmed for [day] in the [time] at [address].\n\nOur consultant will arrive on time and will review your [company] bill to walk you through the full analysis. If you need to reach us before then, we\'re happy to help.\n\nIt was a pleasure speaking with you — and I think you\'ll find this conversation was well worth it."',
+            '"Perfect. I have engineer [nombre del ingeniero] in your area on [day] or [time]. He only needs 15 minutes to deliver your savings report.\n\nWould 5:00 pm work better, or do you prefer 7:00 pm so your spouse can also be there and you don\'t have to explain everything afterward?\n\n— When confirming the appointment —\n"I\'m blocking [nombre del ingeniero]\'s schedule for [day] at [time]. He\'s coming from a distance to see you. Please have your last [company] bill ready — even on your phone — so he doesn\'t waste time and can give you the exact numbers.\n\nIf something comes up, can you promise me you\'ll let me know so he doesn\'t make the trip for nothing?"',
+          caution: 'The closing "can you promise me?" activates verbal commitment and dramatically reduces no-shows. It\'s the most important step in the script.',
         },
       ],
       objections: [
         {
           id: 'o1',
-          trigger: "I'm not interested / I don't need it",
+          trigger: 'I have panels and they don\'t work / The company disappeared',
           response:
-            '"I completely understand. Can I ask — has your electric bill gone up in the last year? Because what we offer isn\'t really a product — it\'s a way to make the money you\'re already spending every month work for you instead of going to the utility. Just 20 minutes with our consultant and you decide with real numbers in hand."',
+            '"[homeowner], I completely understand — and that\'s actually the main reason I\'m calling. Windmar is leading an \'Energy Rescue\' program in [city]. There are hundreds of people in your exact situation with orphaned systems.\n\nMy engineer isn\'t going to sell you anything new — he\'s going to audit your current system to see how we can reactivate it so you finally stop paying the utility what you should already be saving.\n\nIsn\'t 15 minutes worth it to recover your investment?"',
         },
         {
           id: 'o2',
-          trigger: "I already have solar / I've looked into it",
+          trigger: 'I\'m not interested / I don\'t want panels',
           response:
-            '"Glad to hear that. Was your installation done by a local company or a national one? I ask because several homeowners in the area who went with Freedom Forever or other companies that have since closed are now without an active warranty. If yours is fully covered, great — but it\'s worth verifying at no cost."',
+            '"I understand — nobody wants more debt. But my call isn\'t about panels. It\'s about the abusive rate increase from [company] that just went into effect.\n\nOur audit is to help you protect your wallet — with or without panels. It\'s technical information about your property that you have a right to know.\n\nWould tomorrow afternoon or Saturday work better for the report?"',
         },
         {
           id: 'o3',
-          trigger: "I don't have money / I can't afford it",
+          trigger: 'I\'m in bankruptcy / I don\'t have money',
           response:
-            '"That\'s exactly why I\'m calling. The system is installed with zero down. The monthly financing payment is designed to be equal to or less than what you\'re paying for electricity today. Many customers end up paying less from the very first month. It\'s not an extra expense — it\'s a swap."',
+            '"I\'m really sorry to hear that — and that\'s exactly why this visit is 100% free and with no commitment.\n\nThe state has incentive programs for people who need to reduce their mandatory monthly expenses — like electricity — without putting a single dollar out of pocket. My job is to see if your home qualifies for those subsidies.\n\nIf it doesn\'t qualify, no problem — at least you\'ll have the information. Would Monday at 2:00 pm work?"',
         },
         {
           id: 'o4',
-          trigger: 'Send me information by email',
+          trigger: 'Send me the information by email / WhatsApp',
           response:
-            '"Happy to send something, but the reality is the numbers are different for every home based on the roof, consumption, and bill. Whatever I send won\'t be as accurate as the personalized analysis our consultant does in 20 minutes. What day works for you this week so we can stop by?"',
+            '"I\'d love to, but sending you something generic would be disrespectful on my part.\n\nThe savings information depends on the condition of your roof, your home\'s orientation, and your [company] consumption history. Anything I send right now wouldn\'t be real numbers.\n\nThe engineer delivers everything in writing in 15 minutes after checking your meter. Are you home tomorrow at 6:00 pm?"',
         },
         {
           id: 'o5',
-          trigger: 'I need to talk to my spouse',
+          trigger: 'Where did you get my number?',
           response:
-            '"Of course — it\'s a household decision. In fact, our consultant\'s visit is designed so that both of you can see everything together at the same time, so you have all the information and can decide calmly. When are you both available?"',
+            '"Great question. We work with public property registry databases in the [city] area. We filter homes that, based on their size and location, are being most affected by the new \'peak-hour\' charges from the electric company.\n\nWe specifically want to help homeowners on this street.\n\nBy the way — are you the owner of the property or do you rent?"',
+        },
+        {
+          id: 'o6',
+          trigger: 'I need to discuss it with my spouse',
+          response:
+            '"Excellent! In fact, it\'s essential that you\'re both there. Since this is an audit that affects your property value and household credit, we ask that both of you are present so there are no doubts and you don\'t have to explain it all afterward.\n\nIt\'s better for both of you to hear directly how to protect your credit and your home from [company]\'s rate hikes.\n\nWhat time do you both get home from work so the engineer can visit and explain everything to both of you at the same time?"',
         },
       ],
     },
