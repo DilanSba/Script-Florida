@@ -1,6 +1,6 @@
 export type Lang = 'es' | 'en';
 
-export const DEFAULT_SPEECH_IDS = ['freedom-forever', 'retencion-closed-lost'] as const;
+export const DEFAULT_SPEECH_IDS = ['cold-calling', 'freedom-forever', 'retencion-closed-lost'] as const;
 
 /* ── UI labels ─────────────────────────────────────────────────────────────── */
 
@@ -329,6 +329,83 @@ export function getDefaultSpeeches(lang: Lang): Speech[] {
   if (lang === 'es') {
     return [
       {
+        id: 'cold-calling',
+        name: 'Cold Calling — Solar',
+        campaign: 'Prospección Fría',
+        steps: [
+          {
+            id: '1',
+            title: '1 · Apertura',
+            subtitle: 'Permiso + propósito claro en los primeros 10 segundos',
+            content:
+              '"Buenos días/tardes, ¿me podría comunicar con [nombre del titular]?\n\n[nombre del titular], le habla [nombre del asesor] de Windmar Home Solar aquí en [ciudad].\n\nLe llamo porque estamos trabajando con propietarios de vivienda en su área y hemos encontrado una forma de reducir significativamente la factura de [compania] — sin costo inicial.\n\n¿Le cuento en 30 segundos de qué se trata?"',
+            caution: 'Espera la respuesta antes de continuar. El "¿Le cuento?" convierte el monólogo en conversación y reduce el rechazo.',
+          },
+          {
+            id: '2',
+            title: '2 · Cualificación',
+            subtitle: 'Confirmar que el cliente aplica antes de avanzar',
+            content:
+              '"Perfecto. Antes de contarle, déjeme hacerle dos preguntas rápidas para asegurarme de que esto aplica para su casa.\n\n¿Usted es el propietario de la vivienda donde vive actualmente?\n\n(Espera respuesta)\n\nY su factura de [compania], ¿está por encima de los $100 al mes en promedio?\n\n(Espera respuesta)\n\nPerfecto, entonces sí aplica para lo que estamos ofreciendo."',
+            caution: 'Si renta o la factura es baja, agradece su tiempo y no continúes. Calidad sobre cantidad en las citas.',
+          },
+          {
+            id: '3',
+            title: '3 · Propuesta de Valor',
+            subtitle: 'El problema (factura) → la solución (solar) → la prueba (Windmar)',
+            content:
+              '"Lo que hacemos en Windmar es instalar paneles solares en su hogar — con financiamiento a $0 de inicial — para que su cuota mensual del sistema sea igual o menor a lo que paga hoy a [compania].\n\nEn vez de pagarle a la eléctrica indefinidamente, ese dinero va a cubrir algo que al final usted termina siendo el dueño.\n\nWindmar lleva más de 15 años en Florida, hemos instalado miles de sistemas en el estado y nos respaldamos con garantías reales de producción — no desaparecemos después de la instalación.\n\nY lo mejor: hay incentivos federales del 30% disponibles este año que reducen considerablemente el costo total."',
+          },
+          {
+            id: '4',
+            title: '4 · Cierre de Cita',
+            subtitle: 'Doble alternativa — nunca "¿le interesa?"',
+            content:
+              '"Lo que le propongo es que uno de nuestros consultores pase por su casa — sin costo, sin compromiso — para hacer el análisis de su factura y mostrarle exactamente cuánto se ahorraría con paneles en su hogar específico.\n\nCIERRE A — DOBLE ALTERNATIVA\n"¿Le queda mejor que pasemos esta semana o prefiere la próxima? ¿Mañana en la mañana o mejor en la tarde?"\n\nCIERRE B — URGENCIA REAL\n"Tenemos un consultor cubriendo su área en los próximos días y los espacios se están llenando. ¿Cuál es el mejor día para usted esta semana?"',
+            caution: 'Nunca preguntes "¿Le gustaría una visita?" — da opción de decir no. Siempre dos alternativas concretas.',
+          },
+          {
+            id: '5',
+            title: '5 · Confirmación y Cierre',
+            subtitle: 'Repasar datos en voz alta antes de colgar',
+            content:
+              '"Perfecto, [nombre del titular]. Queda agendada la visita el [dia] en horas de la [horario] en [direccion].\n\nNuestro consultor llegará puntual y revisará su factura de [compania] para mostrarle el análisis completo. Si necesita contactarnos antes, con gusto le atendemos.\n\nFue un placer hablar con usted — y ya verá que esta conversación valdrá la pena."',
+          },
+        ],
+        objections: [
+          {
+            id: 'o1',
+            trigger: 'No me interesa / No necesito',
+            response:
+              '"Lo entiendo perfectamente. Puedo preguntarle algo: ¿su factura de luz ha subido en el último año? Porque lo que ofrecemos no es un producto — es una forma de que ese dinero que ya gasta cada mes trabaje para usted en lugar de irse a la eléctrica. Solo 20 minutos con nuestro consultor y usted decide con información real."',
+          },
+          {
+            id: 'o2',
+            trigger: 'Ya tengo solar / Ya lo investigué',
+            response:
+              '"Me alegra. ¿Su instalación fue con una empresa local o con una nacional? Le pregunto porque varios propietarios en el área que instalaron con Freedom Forever o con empresas que ya cerraron, hoy están sin garantía activa. Si el suyo está bien cubierto, perfecto — pero vale la pena verificarlo sin costo."',
+          },
+          {
+            id: 'o3',
+            trigger: 'No tengo dinero / No puedo pagar',
+            response:
+              '"Justo por eso le llamo. El sistema se instala a $0 de inicial. La cuota mensual del financiamiento está diseñada para ser igual o menor a lo que paga hoy de luz. Muchos clientes terminan pagando menos desde el primer mes. No es un gasto adicional — es un intercambio."',
+          },
+          {
+            id: 'o4',
+            trigger: 'Mándeme información por email',
+            response:
+              '"Con gusto le envío algo, pero la realidad es que los números son distintos para cada casa según el techo, el consumo y la factura. Lo que le mande no va a ser tan preciso como el análisis personalizado que hace nuestro consultor en 20 minutos. ¿Qué día tiene disponible esta semana para que pasemos?"',
+          },
+          {
+            id: 'o5',
+            trigger: 'Tengo que hablar con mi esposo/a',
+            response:
+              '"Claro, es una decisión de hogar. De hecho, la visita de nuestro consultor está pensada para que ambos la vean juntos — así tienen toda la información al mismo tiempo y pueden decidir con calma. ¿Cuándo están los dos disponibles?"',
+          },
+        ],
+      },
+      {
         id: 'freedom-forever',
         name: 'Campaña Freedom Forever',
         campaign: 'Telemercadeo',
@@ -414,6 +491,83 @@ export function getDefaultSpeeches(lang: Lang): Speech[] {
 
   /* English */
   return [
+    {
+      id: 'cold-calling',
+      name: 'Cold Calling — Solar',
+      campaign: 'Cold Prospecting',
+      steps: [
+        {
+          id: '1',
+          title: '1 · Opening',
+          subtitle: 'Permission + clear purpose in the first 10 seconds',
+          content:
+            '"Good morning/afternoon, may I speak with [homeowner]?\n\n[homeowner], this is [advisor] calling from Windmar Home Solar here in [city].\n\nI\'m reaching out because we\'re working with homeowners in your area and we\'ve found a way to significantly reduce your [company] bill — with zero upfront cost.\n\nCan I share what it\'s about in 30 seconds?"',
+          caution: 'Wait for their response before continuing. The "Can I share?" turns the monologue into a conversation and reduces hang-ups.',
+        },
+        {
+          id: '2',
+          title: '2 · Qualification',
+          subtitle: 'Confirm the customer qualifies before moving forward',
+          content:
+            '"Great. Before I go into detail, let me ask two quick questions to make sure this applies to your home.\n\nAre you the owner of the home you currently live in?\n\n(Wait for response)\n\nAnd is your [company] bill typically above $100 a month on average?\n\n(Wait for response)\n\nPerfect — that means you do qualify for what we\'re offering."',
+          caution: 'If they rent or the bill is low, thank them and move on. Quality over quantity in appointments.',
+        },
+        {
+          id: '3',
+          title: '3 · Value Proposition',
+          subtitle: 'The problem (bill) → the solution (solar) → the proof (Windmar)',
+          content:
+            '"What we do at Windmar is install solar panels on your home — with $0 down financing — so that your monthly system payment is equal to or less than what you\'re currently paying [company].\n\nInstead of sending that money to the utility company indefinitely, it goes toward something you end up owning.\n\nWindmar has been in Florida for over 15 years. We\'ve installed thousands of systems across the state and we back everything with real production warranties — we don\'t disappear after installation.\n\nAnd the best part: 30% federal tax incentives are available this year, which significantly reduces the total cost."',
+        },
+        {
+          id: '4',
+          title: '4 · Appointment Close',
+          subtitle: 'Double alternative — never "are you interested?"',
+          content:
+            '"What I\'d like to propose is having one of our consultants stop by your home — no cost, no commitment — to analyze your bill and show you exactly how much you\'d save with solar on your specific home.\n\nCLOSE A — DOUBLE ALTERNATIVE\n"Would it work better to stop by this week or next? Morning or afternoon?"\n\nCLOSE B — REAL URGENCY\n"We have a consultant covering your area over the next few days and slots are filling up. Which day works best for you this week?"',
+          caution: 'Never ask "Would you like a visit?" — it gives them the option to say no. Always offer two concrete choices.',
+        },
+        {
+          id: '5',
+          title: '5 · Confirmation & Close',
+          subtitle: 'Repeat all details out loud before hanging up',
+          content:
+            '"Perfect, [homeowner]. The visit is confirmed for [day] in the [time] at [address].\n\nOur consultant will arrive on time and will review your [company] bill to walk you through the full analysis. If you need to reach us before then, we\'re happy to help.\n\nIt was a pleasure speaking with you — and I think you\'ll find this conversation was well worth it."',
+        },
+      ],
+      objections: [
+        {
+          id: 'o1',
+          trigger: "I'm not interested / I don't need it",
+          response:
+            '"I completely understand. Can I ask — has your electric bill gone up in the last year? Because what we offer isn\'t really a product — it\'s a way to make the money you\'re already spending every month work for you instead of going to the utility. Just 20 minutes with our consultant and you decide with real numbers in hand."',
+        },
+        {
+          id: 'o2',
+          trigger: "I already have solar / I've looked into it",
+          response:
+            '"Glad to hear that. Was your installation done by a local company or a national one? I ask because several homeowners in the area who went with Freedom Forever or other companies that have since closed are now without an active warranty. If yours is fully covered, great — but it\'s worth verifying at no cost."',
+        },
+        {
+          id: 'o3',
+          trigger: "I don't have money / I can't afford it",
+          response:
+            '"That\'s exactly why I\'m calling. The system is installed with zero down. The monthly financing payment is designed to be equal to or less than what you\'re paying for electricity today. Many customers end up paying less from the very first month. It\'s not an extra expense — it\'s a swap."',
+        },
+        {
+          id: 'o4',
+          trigger: 'Send me information by email',
+          response:
+            '"Happy to send something, but the reality is the numbers are different for every home based on the roof, consumption, and bill. Whatever I send won\'t be as accurate as the personalized analysis our consultant does in 20 minutes. What day works for you this week so we can stop by?"',
+        },
+        {
+          id: 'o5',
+          trigger: 'I need to talk to my spouse',
+          response:
+            '"Of course — it\'s a household decision. In fact, our consultant\'s visit is designed so that both of you can see everything together at the same time, so you have all the information and can decide calmly. When are you both available?"',
+        },
+      ],
+    },
     {
       id: 'freedom-forever',
       name: 'Freedom Forever Campaign',
