@@ -12,6 +12,10 @@
   --color-wh-darkblue: #21274E;
 }
 
+/* ─── Utilities ──────────────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* ─── Dark mode ─────────────────────────────────────────────────────────── */
 @variant dark (&:where(.dark, .dark *));
 
