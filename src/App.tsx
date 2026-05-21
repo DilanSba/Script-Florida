@@ -88,37 +88,34 @@ export default function App() {
     localStorage.setItem(LS_DARK_KEY, String(darkMode));
   }, [darkMode]);
 
+  /* Carga los speeches del idioma activo. Se ejecuta cuando cambia `lang`.
+     Clave por idioma para preservar ediciones independientes en ES y EN. */
   useEffect(() => {
+    const lsKey = `windmar_speeches_${lang}`;
     try {
-      const saved = localStorage.getItem('windmar_speeches');
+      const saved = localStorage.getItem(lsKey);
       if (saved) {
         const parsed: Speech[] = JSON.parse(saved);
-        const custom = parsed.filter(s => !(DEFAULT_SPEECH_IDS as readonly string[]).includes(s.id));
-        setSpeeches([...getDefaultSpeeches(lang), ...custom]);
+        // Si hay nuevos speeches default que no estaban guardados aún, los agrega al final.
+        const savedIds = new Set(parsed.map(s => s.id));
+        const missing  = getDefaultSpeeches(lang).filter(s => !savedIds.has(s.id));
+        setSpeeches(missing.length ? [...parsed, ...missing] : parsed);
       } else {
         const defaults = getDefaultSpeeches(lang);
         setSpeeches(defaults);
-        localStorage.setItem('windmar_speeches', JSON.stringify(defaults));
+        localStorage.setItem(lsKey, JSON.stringify(defaults));
       }
     } catch {
       setSpeeches(getDefaultSpeeches(lang));
     }
     setIsLoaded(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lang]);
 
-  useEffect(() => {
-    if (!isLoaded) return;
-    setSpeeches(prev => {
-      const custom = prev.filter(s => !(DEFAULT_SPEECH_IDS as readonly string[]).includes(s.id));
-      return [...getDefaultSpeeches(lang), ...custom];
-    });
-  }, [lang, isLoaded]);
-
+  /* Guarda TODOS los speeches (default + custom) bajo la clave del idioma activo. */
   const updateSpeeches = (newSpeeches: Speech[]) => {
     setSpeeches(newSpeeches);
-    const custom = newSpeeches.filter(s => !(DEFAULT_SPEECH_IDS as readonly string[]).includes(s.id));
-    localStorage.setItem('windmar_speeches', JSON.stringify(custom));
+    localStorage.setItem(`windmar_speeches_${lang}`, JSON.stringify(newSpeeches));
   };
 
   const handleQuickEdit = (speech: Speech) => {
@@ -1330,6 +1327,14 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
 
   const handleClose = () => { setEditingSpeech(null); if (onEditHandled) onEditHandled(); };
 
+  const handleResetToDefault = () => {
+    if (!editingSpeech) return;
+    const label = lang === 'es' ? '¿Restaurar el contenido original de este guion? Se perderán los cambios guardados.' : 'Restore this script to its original content? All saved changes will be lost.';
+    if (!confirm(label)) return;
+    const original = getDefaultSpeeches(lang).find(s => s.id === editingSpeech.id);
+    if (original) setEditingSpeech(original);
+  };
+
   const handleDelete = (id: string) => {
     if ((DEFAULT_SPEECH_IDS as readonly string[]).includes(id)) return;
     if (confirm(t.deleteConfirm)) onUpdate(speeches.filter(s => s.id !== id));
@@ -1381,14 +1386,16 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
                   </p>
                 </div>
                 <div className="flex gap-1 items-start">
-                  {!isRetention && !isDefault && (
+                  {!isRetention && (
                     <>
-                      <button onClick={() => setEditingSpeech(s)} className="p-2 min-h-[40px] text-wh-teslagrey hover:text-wh-blue hover:bg-slate-100 rounded-lg transition-all">
+                      <button onClick={() => setEditingSpeech(s)} className="p-2 min-h-[40px] text-wh-teslagrey hover:text-wh-blue hover:bg-slate-100 rounded-lg transition-all" title={lang === 'es' ? 'Editar guion' : 'Edit script'}>
                         <Settings size={18} />
                       </button>
-                      <button onClick={() => handleDelete(s.id)} className="p-2 min-h-[40px] text-wh-teslagrey hover:text-red-500 hover:bg-slate-100 rounded-lg transition-all">
-                        <Trash2 size={18} />
-                      </button>
+                      {!isDefault && (
+                        <button onClick={() => handleDelete(s.id)} className="p-2 min-h-[40px] text-wh-teslagrey hover:text-red-500 hover:bg-slate-100 rounded-lg transition-all" title={lang === 'es' ? 'Eliminar' : 'Delete'}>
+                          <Trash2 size={18} />
+                        </button>
+                      )}
                     </>
                   )}
                   {isRetention && (
@@ -1572,11 +1579,26 @@ function ManagerView({ speeches, onUpdate, initialEditSpeech, onEditHandled }: {
                   </div>
                 </div>
               </form>
-              <div className="p-5 md:p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 shrink-0">
-                <button type="button" onClick={handleClose} className="px-6 py-2.5 min-h-[48px] rounded-xl font-bold text-wh-grey hover:bg-slate-200 transition-all">{t.cancel}</button>
-                <button onClick={handleSave} className="px-8 py-2.5 min-h-[48px] bg-wh-blue text-white rounded-xl font-bold shadow-lg shadow-wh-blue/20 flex items-center gap-2">
-                  <Save size={18} /> {t.save}
-                </button>
+              <div className="p-5 md:p-6 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3 shrink-0 flex-wrap">
+                {/* Reset to default — solo para speeches predefinidos */}
+                <div>
+                  {editingSpeech && (DEFAULT_SPEECH_IDS as readonly string[]).includes(editingSpeech.id) && (
+                    <button
+                      type="button"
+                      onClick={handleResetToDefault}
+                      className="px-4 py-2.5 min-h-[48px] rounded-xl font-bold text-amber-600 border border-amber-200 bg-amber-50 hover:bg-amber-100 transition-all text-sm flex items-center gap-2"
+                    >
+                      <Trash2 size={15} />
+                      {lang === 'es' ? 'Restaurar original' : 'Reset to default'}
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-3">
+                  <button type="button" onClick={handleClose} className="px-6 py-2.5 min-h-[48px] rounded-xl font-bold text-wh-grey hover:bg-slate-200 transition-all">{t.cancel}</button>
+                  <button onClick={handleSave} className="px-8 py-2.5 min-h-[48px] bg-wh-blue text-white rounded-xl font-bold shadow-lg shadow-wh-blue/20 flex items-center gap-2">
+                    <Save size={18} /> {t.save}
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>
