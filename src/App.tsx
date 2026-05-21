@@ -93,15 +93,25 @@ export default function App() {
   useEffect(() => {
     const lsKey = `windmar_speeches_${lang}`;
     try {
+      const defaults = getDefaultSpeeches(lang);
+      const defaultMap = new Map(defaults.map(s => [s.id, s]));
       const saved = localStorage.getItem(lsKey);
       if (saved) {
         const parsed: Speech[] = JSON.parse(saved);
-        // Si hay nuevos speeches default que no estaban guardados aún, los agrega al final.
+        // Reemplaza defaults desactualizados comparando _v; agrega defaults nuevos al final.
+        const merged = parsed.map(s => {
+          const def = defaultMap.get(s.id);
+          if (def && DEFAULT_SPEECH_IDS.includes(s.id as typeof DEFAULT_SPEECH_IDS[number]) && (def._v ?? 1) > (s._v ?? 1)) {
+            return def;
+          }
+          return s;
+        });
         const savedIds = new Set(parsed.map(s => s.id));
-        const missing  = getDefaultSpeeches(lang).filter(s => !savedIds.has(s.id));
-        setSpeeches(missing.length ? [...parsed, ...missing] : parsed);
+        const missing = defaults.filter(s => !savedIds.has(s.id));
+        const final = missing.length ? [...merged, ...missing] : merged;
+        setSpeeches(final);
+        localStorage.setItem(lsKey, JSON.stringify(final));
       } else {
-        const defaults = getDefaultSpeeches(lang);
         setSpeeches(defaults);
         localStorage.setItem(lsKey, JSON.stringify(defaults));
       }

@@ -321,6 +321,7 @@ export interface Speech {
   name: string;
   campaign: string;
   type?: 'standard' | 'retention';
+  _v?: number;
   steps: SpeechStep[];
   objections: { id: string; trigger: string; response: string }[];
 }
@@ -332,6 +333,7 @@ export function getDefaultSpeeches(lang: Lang): Speech[] {
         id: 'cold-calling',
         name: 'Cold Calling — El Método de la Autoridad',
         campaign: 'Auditoría Energética',
+        _v: 2,
         steps: [
           {
             id: '1',
@@ -503,6 +505,7 @@ export function getDefaultSpeeches(lang: Lang): Speech[] {
       id: 'cold-calling',
       name: 'Cold Calling — The Authority Method',
       campaign: 'Energy Audit',
+      _v: 2,
       steps: [
         {
           id: '1',
